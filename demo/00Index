@@ -1,0 +1,20 @@
+roc.simu          cubfits   A simulation study for ROC.
+roc.train         cubfits   A training example for ROC.
+roc.appr          cubfits   An approximation for ROC.
+roc.pred          cubfits   A prediction for ROC.
+nsef.simu         cubfits   A simulation study for NSEf.
+nsef.train        cubfits   A training example for NSEf.
+nsef.appr         cubfits   An approximation for NSEf.
+nsef.pred         cubfits   A prediction for NSEf.
+rocnsef.train     cubfits   A training example for ROC+NSEf.
+rocnsef.appr      cubfits   An approximation for ROC+NSEf.
+rocnsef.pred      cubfits   A prediction for ROC+NSEf.
+scuo              cubfits   Computing SCUO index.
+cai               cubfits   Computing CAI.
+mSCU              cubfits   Computing mSCU.
+plotbin           cubfits   Ploting binning and model.
+basic             cubfits   Reading and producing toy data.
+fitMultinom       cubfits   An example of Shah & Gilchrist 2011.
+yassour.mixed     cubfits   Fitting mixed model for yassour 2009.
+yassour.mixture   cubfits   Fitting mixture model for yassour 2009 by EM.
+yassour.asl       cubfits   Fitting ASL model for yassour 2009.
