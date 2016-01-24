@@ -1,17 +1,20 @@
 Package: cubfits
-Version: 0.1-0
-Date: 2014-05-15
+Version: 0.1-2
+Date: 2016-01-24
 Title: Codon Usage Bias Fits
 Authors@R: c(person("Wei-Chen", "Chen", role = c("aut", "cre"), email =
        "wccsnow@gmail.com"),
        person("Russell", "Zaretzki", role = "aut"),
        person("William", "Howell", role = "aut"),
+       person("Cedric", "Landerer", role = "aut"),
        person("Drew", "Schmidt", role = "aut"),
-       person("Michael", "Gilchrist", role = "aut"),
+       person("Michael A.", "Gilchrist", role = "aut"),
+       person("Preston", "Hewgley", role = "ctb"),
        person("Students", "REU13", role = "ctb"))
-Depends: R(>= 3.0.0), methods
+Depends: R(>= 3.0.0), methods, coda, foreach, parallel, stats,
+        graphics, utils
 Suggests: seqinr, VGAM, EMCluster
-Enhances: pbdMPI (>= 0.2-2), parallel
+Enhances: pbdMPI (>= 0.3-1)
 LazyLoad: yes
 LazyData: yes
 Description: Estimating mutation and selection coefficients on synonymous
@@ -24,14 +27,16 @@ Description: Estimating mutation and selection coefficients on synonymous
        yeast genome and gene expression data of Yassour (2009).
 License: Mozilla Public License 2.0
 URL: https://github.com/snoweye/cubfits
-Packaged: 2014-05-18 19:08:04 UTC; snoweye
+NeedsCompilation: yes
+Packaged: 2016-01-24 20:10:27 UTC; snoweye
 Author: Wei-Chen Chen [aut, cre],
   Russell Zaretzki [aut],
   William Howell [aut],
+  Cedric Landerer [aut],
   Drew Schmidt [aut],
-  Michael Gilchrist [aut],
+  Michael A. Gilchrist [aut],
+  Preston Hewgley [ctb],
   Students REU13 [ctb]
 Maintainer: Wei-Chen Chen <wccsnow@gmail.com>
-NeedsCompilation: yes
 Repository: CRAN
-Date/Publication: 2014-05-19 07:14:28
+Date/Publication: 2016-01-24 21:39:07

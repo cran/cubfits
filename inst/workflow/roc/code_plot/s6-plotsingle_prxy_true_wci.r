@@ -16,7 +16,7 @@ if(file.exists(fn.in)){
 }
 Phi <- EPhi
 
-### pre processed phi.Obs.
+### Pre processed phi.Obs.
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
@@ -28,18 +28,16 @@ for(i.case in case.names){
     next
   }
   load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   cat("File not found: ", fn.in, "\n", sep = "")
+  #   next
+  # }
+  # load(fn.in)
 
-  ### Subset of mcmc output with scaling.
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  if(!file.exists(fn.in)){
-    cat("File not found: ", fn.in, "\n", sep = "")
-    next
-  }
-  load(fn.in)
-
-  ### plot posterior mean.
+  ### Plot posterior mean.
   fn.out <- paste(prefix$plot.single,
-                  "prxy_true_wci_", i.case, ".pdf", sep = "")
+                  "prxy_true_wci_", i.case, "_nps.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     ### x-axis: true, y-axis: predicted.
     plotprxy(Phi, phi.PM,
@@ -50,11 +48,12 @@ for(i.case in case.names){
              main = paste(i.case, " posterior mean", sep = ""))
     mtext(paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""),
           line = 3, cex = 0.6)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 
-  ### plot posterior median.
+  ### Plot posterior median.
   fn.out <- paste(prefix$plot.single,
-                  "prxy_true_wci_med_", i.case, ".pdf", sep = "")
+                  "prxy_true_wci_med_", i.case, "_nps.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     ### x-axis: true, y-axis: predicted.
     plotprxy(Phi, phi.MED,
@@ -65,11 +64,12 @@ for(i.case in case.names){
              main = paste(i.case, " posterior median", sep = ""))
     mtext(paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""),
           line = 3, cex = 0.6)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 
-  ### plot posterior log10 mean.
+  ### Plot posterior log10 mean.
   fn.out <- paste(prefix$plot.single,
-                  "prxy_true_wci_log10_", i.case, ".pdf", sep = "")
+                  "prxy_true_wci_log10_", i.case, "_nps.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     ### x-axis: true, y-axis: predicted.
     plotprxy(Phi, 10^(phi.PM.log10),
@@ -80,6 +80,7 @@ for(i.case in case.names){
              main = paste(i.case, " posterior log10 mean", sep = ""))
     mtext(paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""),
           line = 3, cex = 0.6)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }
 

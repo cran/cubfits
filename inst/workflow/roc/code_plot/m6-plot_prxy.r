@@ -10,7 +10,7 @@ if(length(case.names) < 4){
   stop("Need 4 cases to match with.")
 }
 
-### Ordered by "ad_wophi_pm", "ad_wophi_scuo", "ad_wphi_pm", and "ad_wphi_scuo".
+### Ordered by "wophi_pm", "wophi_scuo", "wphi_pm", and "wphi_scuo".
 phi.mean <- list(NULL, NULL, NULL, NULL)
 phi.median <- list(NULL, NULL, NULL, NULL)
 phi.std <- list(NULL, NULL, NULL, NULL)
@@ -24,12 +24,12 @@ for(i.case in 1:4){
   load(fn.in)
 
   ### Subset of mcmc output with scaling.
-  fn.in <- paste(prefix$subset, case.names[i.case], "_PM_scaling.rda", sep = "")
-  if(!file.exists(fn.in)){
-    cat("File not found: ", fn.in, "\n", sep = "")
-    next
-  }
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, case.names[i.case], "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   cat("File not found: ", fn.in, "\n", sep = "")
+  #   next
+  # }
+  # load(fn.in)
 
   phi.mean[[i.case]] <- phi.PM
   phi.median[[i.case]] <- phi.MED
@@ -46,6 +46,7 @@ if(!is.null(phi.mean[[3]]) && !is.null(phi.mean[[1]])){
              ylab = "Production Rate without phi (log10)",
              main = "fits vs appr (pm, posterior mean)")
     mtext(workflow.name, line = 3, cex = 0.6)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }
 
@@ -58,6 +59,7 @@ if(!is.null(phi.mean[[4]]) && !is.null(phi.mean[[2]])){
              ylab = "Production Rate without phi (log10)",
              main = "fits vs appr (scuo, posterior mean)")
     mtext(workflow.name, line = 3, cex = 0.6)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }
 
@@ -71,6 +73,7 @@ if(!is.null(phi.mean[[3]]) && !is.null(phi.mean[[1]])){
              ylab = "Production Rate without phi (log10)",
              main = "fits vs appr (pm, posterior median)")
     mtext(workflow.name, line = 3, cex = 0.6)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }
 
@@ -83,6 +86,7 @@ if(!is.null(phi.mean[[4]]) && !is.null(phi.mean[[2]])){
              ylab = "Production Rate without phi (log10)",
              main = "fits vs appr (scuo, posterior median)")
     mtext(workflow.name, line = 3, cex = 0.6)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }
 

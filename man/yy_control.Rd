@@ -55,14 +55,18 @@
     \code{.CF.CONF} controls the initial and draw scaling. 
     It currently includes
     \tabular{ll}{
-      \code{scale.phi}          \tab if phi were scaled to mean 1\cr
-      \code{init.b.Scale}       \tab initial b scale \cr
-      \code{init.phi.Scale}     \tab initial phi scale \cr
-      \code{p.nclass}           \tab number of classes if mixture phi \cr
-      \code{b.DrawScale}        \tab drawing scale for b if random walk \cr
-      \code{p.DrawScale}        \tab drawing scale for p if random walk \cr
-      \code{phi.DrawScale}      \tab random walk scale for phi \cr
-      \code{phi.DrawScale.pred} \tab random walk scale for phi.pred
+      \code{scale.phi.Obs}           \tab if phi were scaled to mean 1 \cr
+      \code{init.b.Scale}            \tab initial b scale \cr
+      \code{init.phi.Scale}          \tab initial phi scale \cr
+      \code{p.nclass}                \tab number of classes if mixture phi \cr
+      \code{b.DrawScale}             \tab drawing scale for b if random walk \cr
+      \code{p.DrawScale}             \tab drawing scale for p if random walk \cr
+      \code{phi.DrawScale}           \tab random walk scale for phi \cr
+      \code{phi.pred.DrawScale}      \tab random walk scale for phi.pred \cr
+      \code{sigma.Phi.DrawScale}     \tab random walk scale for sigma.Phi \cr
+      \code{bias.Phi.DrawScale}      \tab random walk scale for bias.Phi \cr
+      \code{estimate.bias.Phi}       \tab if estimate bias of phi during MCMC \cr
+      \code{compute.logL}            \tab if compute logL in each iteration
     }
 
   \item
@@ -70,8 +74,10 @@
     It currently includes
     \tabular{ll}{
       \code{amino.acid}             \tab amino acids \cr
+      \code{amino.acid.3}           \tab amino acids \cr
       \code{synonymous.codon}       \tab synonymous codons of amino acids \cr
       \code{amino.acid.split}       \tab amino acid 'S' is split \cr
+      \code{amino.acid.split.3}     \tab amino acid 'S' is split \cr
       \code{synonymous.codon.split} \tab synonymous codons of split amino acid
     }
 
@@ -94,7 +100,6 @@
       \code{dump}             \tab if dumping within MCMC \cr
       \code{iter}             \tab iterations per dumping \cr
       \code{prefix.dump}      \tab path and file names of dumping \cr
-      \code{trace.acceptance} \tab if trace acceptance rate \cr
       \code{verbose}          \tab if verbose \cr
       \code{iterThin}         \tab iterations to thin chain \cr
       \code{report}           \tab iterations to report \cr
@@ -105,12 +110,12 @@
     \code{.CF.AC} controls adaptive MCMC. It currently includes
     \tabular{ll}{
       \code{renew.iter}          \tab per renewing iterations \cr
-      \code{target.accept.lower} \tab target acceptance lower bound \cr
-      \code{target.accept.upper} \tab target acceptance upper bound \cr
-      \code{scale.increase}      \tab 10\% more \cr
-      \code{scale.decrease}      \tab 10\% less \cr
-      \code{sigma2.lower}        \tab lower bound of sigma^2 \cr
-      \code{sigma2.upper}        \tab upper bound of sigma^2
+      \code{target.accept.lower} \tab target acceptant rate lower bound \cr
+      \code{target.accept.upper} \tab target acceptant rate upper bound \cr
+      \code{scale.increase}      \tab increase scale size \cr
+      \code{scale.decrease}      \tab decrease scale size \cr
+      \code{sigma.lower}         \tab lower bound of relative scale size \cr
+      \code{sigma.upper}         \tab upper bound of relative scale size
     }
 
   \item
@@ -124,11 +129,7 @@
     It currently includes
     \tabular{ll}{
       \code{phi.meanlog}      \tab mean of phi in loca scale \cr
-      \code{phi.sdlog}        \tab standard deviation of phi in loca scale \cr
-      \code{hp.gamma.shape}   \tab hyperparameters of gamma distribution \cr
-      \code{hp.gamma.scale}   \tab hyperparameters of gamma distribution \cr
-      \code{hp.gamma.inflate} \tab inflate gamma variance if overwrite \cr
-      \code{hp.overwrite}     \tab if allow \code{my.pInit()} to overwrite
+      \code{phi.sdlog}        \tab standard deviation of phi in loca scale
     }
 
   \item

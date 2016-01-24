@@ -25,9 +25,15 @@ for(i.case in case.names){
   }
   load(fn.in)
 
+  ### Since my.appr() doesn't have phi.Mat, but have phi.pred.Mat
+  if(is.null(ret[["phi.Mat"]])){
+    ret$phi.Mat <- ret$phi.pred.Mat
+  }
+
   ### Find genes by quantile.
   ret.phi.Mat <- ret$phi.Mat
-  ret.phi.Mat.scaled <- lapply(ret.phi.Mat, function(x) x / mean(x))
+  # ret.phi.Mat.scaled <- lapply(ret.phi.Mat, function(x) x / mean(x))
+  ret.phi.Mat.scaled <- ret.phi.Mat
 
   ret.phi.Mat.PM <- rowMeans(do.call("cbind", ret.phi.Mat.scaled))
   q.PM <- quantile(ret.phi.Mat.PM, probs = q.probs)
@@ -74,12 +80,13 @@ for(i.case in case.names){
     if(i.q %% 3 == 1){
       nf <- layout(matrix(c(1, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
                           nrow = 4, ncol = 3, byrow = TRUE),
-                   c(1, 1, 1), c(1, 8, 8, 8), respect = FALSE)
+                   c(1, 1, 1), c(2, 8, 8, 8), respect = FALSE)
       ### Plot title.
       par(mar = c(0, 0, 0, 0))
       plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-      text(0.5, 0.5,
+      text(0.5, 0.6,
            paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""))
+      text(0.5, 0.4, date(), cex = 0.6)
       par(mar = c(5.1, 4.1, 4.1, 2.1))
     }
 
@@ -89,10 +96,10 @@ for(i.case in case.names){
          xlim = xlim.trace, ylim = ylim.trace,
          xlab = "Iterations", ylab = "Production Rate (log10)",
          main = paste(names(id.gene)[i.q], ", q = ", q.probs[i.q], sep = ""))
-    abline(h = hist.mean[i.q], col = 2)
-    if(exists("EPhi")){
-      abline(h = log10(EPhi[id.gene[i.q]]), col = 4, lty = 2)
-    }
+    # abline(h = hist.mean[i.q], col = 2)
+    # if(exists("EPhi")){
+    #   abline(h = log10(EPhi[id.gene[i.q]]), col = 4, lty = 2)
+    # }
 
     ### Plot hist
     plot(hist.list[[i.q]],

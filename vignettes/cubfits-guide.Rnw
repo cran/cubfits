@@ -1,8 +1,8 @@
 %\VignetteIndexEntry{cubfits-guide}
 
-\documentclass[article,shortnames,nojss]{cubfits-include/jss}
+\documentclass[article,shortnames,nojss]{jss}
 
-\newcommand{\pkgver}{0.1-0}
+\newcommand{\pkgver}{0.1-2}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -12,8 +12,8 @@
 \author{
 \begin{minipage}{6in}
 \centering
-Wei-Chen Chen$^1$, Russell Zaretzki$^2$, William Howell$^1$, \\
-Drew Schmidt$^3$, and Michael Gilchrist$^{1,4}$
+Wei-Chen Chen$^1$, Russell Zaretzki$^{2,4}$, William Howell$^1$, \\
+Cedric Landerer$^1$, Drew Schmidt$^3$, and Michael A. Gilchrist$^{1,4}$
 \end{minipage}
 \\
 \\
@@ -39,7 +39,7 @@ Knoxville, TN, USA \\
 
 
 %% for pretty printing and a nice hypersummary also set:
-\Plainauthor{Chen, W.-C., Zaretzki, R., Howell, W., Schmidt, D., Gilchrist, M.} %% comma-separated
+\Plainauthor{Chen, W.-C., Zaretzki, R., Howell, W., Schmidt, D., Gilchrist, M.A.} %% comma-separated
 \Plaintitle{Quick Guide for cubfits (Ver. \pkgver)} %% without formatting
 \Shorttitle{Quick Guide for cubfits (Ver. \pkgver)} %% a short title (if necessary)
 
@@ -77,6 +77,7 @@ Knoxville, TN, USA \\
 %% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+\input{./cubfits-include/my_jss.cls}
 \input{./cubfits-include/00-preamble}
 
 \begin{document}
@@ -102,7 +103,8 @@ Knoxville, TN, USA \\
 \input{./cubfits-include/03-speedup}
 \input{./cubfits-include/04-workflows}
 \input{./cubfits-include/05-utilities}
-\input{./cubfits-include/06-misc}
+\input{./cubfits-include/06-faq}
+\input{./cubfits-include/07-misc}
 
 \newpage
 \phantomsection

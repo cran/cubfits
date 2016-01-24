@@ -34,13 +34,21 @@ phi.init.SCUO <- scuo.random(SCUO, meanlog = -simulation$sdlog^2 / 2,
 names(phi.init.SCUO) <- names(phi.Obs)
 
 ### Run more scuo initial.
-phi.init.SCUO.emp <- log(SCUO / mean(SCUO))
+if(.CF.CONF$scale.phi.Obs){
+  phi.init.SCUO.emp <- log(SCUO / mean(SCUO))
+} else{
+  phi.init.SCUO.emp <- log(SCUO)
+}
 phi.init.SCUO.emp <- exp(phi.init.SCUO / sd(phi.init.SCUO) * simulation$sdlog)
 names(phi.init.SCUO.emp) <- names(phi.Obs)
 
-### Scale to Mean 1.
-phi.init.PM <- phi.init.PM / mean(phi.init.PM)
-phi.init.SCUO <- phi.init.SCUO / mean(phi.init.SCUO)
+### Scale to Mean 1, since here phi is for initial values.
+if(.CF.CONF$scale.phi.Obs || .CF.CONF$estimate.bias.Phi){
+  ### No scaling for initial values, but may estimate.bias.Phi
+  phi.init.PM <- phi.init.PM / mean(phi.init.PM)
+  phi.init.SCUO <- phi.init.SCUO / mean(phi.init.SCUO)
+  phi.init.SCUO.emp <- phi.init.SCUO.emp / mean(phi.init.SCUO.emp)
+}
 
 ### Save.
 if(comm.rank() == 0){
@@ -49,9 +57,12 @@ if(comm.rank() == 0){
   print(ret.time)
 
   fn.out <- paste(prefix$data, "init_", model, ".rda", sep = "")
-  list.save <- c("fitlist", "phi.init.PM", "phi.init.SCUO", "phi.init.SCUO.emp",
+  list.save <- c("fitlist", "phi.init.PM", "phi.init.SCUO",
+                 "phi.init.SCUO.emp",
                  "ret.time", "comm.size")
   save(list = list.save, file = fn.out)
+
+  warnings()
 } 
 
 finalize()

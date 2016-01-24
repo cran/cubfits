@@ -7,9 +7,10 @@
 }
 \usage{
   cubfits(reu13.df.obs, phi.Obs, y, n,
-          nIter = 1000, burnin = 100,
-          bInit = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
+          nIter = 1000,
+          b.Init = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
               b.DrawScale = .CF.CONF$b.DrawScale,
+              b.RInit = NULL,
           p.Init = NULL, p.nclass = .CF.CONF$p.nclass,
               p.DrawScale = .CF.CONF$p.DrawScale,
           phi.Init = NULL, init.phi.Scale = .CF.CONF$init.phi.Scale,
@@ -25,11 +26,14 @@
   \item{y}{a \code{\link{y}} object, codon counts.}
   \item{n}{a \code{\link{n}} object, total codon counts.}
   \item{nIter}{number of iterations after burn-in iterations.}
-  \item{burnin}{number of burn-in iterations.}
-  \item{bInit}{initial values for parameters \code{\link{b}}.}
-  \item{init.b.Scale}{for initial \code{\link{b}} if \code{bInit = NULL}.}
+  \item{b.Init}{initial values for parameters \code{\link{b}}.}
+  \item{init.b.Scale}{for initial \code{\link{b}} if \code{b.Init = NULL}.}
   \item{b.DrawScale}{scaling factor for adaptive MCMC with random walks
                      when drawing new \code{\link{b}}.}
+  \item{b.RInit}{initial values (in a list) for \code{R} matrices of
+                 parameters \code{\link{b}} yielding from QR decomposition
+                 of \code{vglm()} for the variance-covariance matrix of
+                 \code{\link{b}}.}
   \item{p.Init}{initial values for hyper-parameters.}
   \item{p.nclass}{number of components for \code{model.Phi = "logmixture"}.}
   \item{p.DrawScale}{scaling factor for adaptive MCMC with random walks
@@ -50,8 +54,8 @@
   This function correctly and carefully implements a combining version of
   Shah and Gilchrist (2011) and Wallace et al. (2013).
 
-  Total number of MCMC iterations is \code{burnin + nIter + 1}, but the
-  outputs may be thinned to \code{(burnin + nIter) / iterThin + 1}
+  Total number of MCMC iterations is \code{nIter + 1}, but the
+  outputs may be thinned to \code{nIter / iterThin + 1}
   iterations.
 
   Temporary result dumping may be controlled by \code{\link{.CF.DP}}.
@@ -61,7 +65,7 @@
   \code{b.Mat} for mutation and selection coefficients of \code{\link{b}},
   \code{p.Mat} for hyper-parameters, and
   \code{phi.Mat} for expected expression values Phi.
-  All lists are of length \code{(burnin + nIter) / iterThin + 1} and
+  All lists are of length \code{nIter / iterThin + 1} and
   each element contains the output of each iteration.
 
   All lists also can be binded as trace matrices, such as via
@@ -70,7 +74,7 @@
   further via other MCMC packages such as \pkg{coda}.
 }
 \note{
-  Note that \code{phi.Obs} need to be normalized to mean 1.
+  Note that \code{phi.Init} need to be normalized to mean 1.
 
   \code{p.DrawScale} may cause scaling prior if adaptive MCMC is used, and
   it can result in non-exits of equilibrium distribution.
@@ -78,7 +82,7 @@
 \references{
   \url{https://github.com/snoweye/cubfits/}
 
-  Shah P. and Gilchrist MA.
+  Shah P. and Gilchrist M.A.
     ``Explaining complex codon usage patterns
       with selection for translational efficiency, mutation bias, and genetic
       drift''

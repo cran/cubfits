@@ -16,13 +16,13 @@ fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
 ### True SCU.
-bInit <- convert.b.to.bVec(Eb)
-all.names <- names(bInit)
+b.Init <- convert.b.to.bVec(Eb)
+all.names <- names(b.Init)
 id.slop <- grep("Delta.t", all.names)
 scale.EPhi <- mean(EPhi)
-bInit[id.slop] <- bInit[id.slop] * scale.EPhi
+b.Init[id.slop] <- b.Init[id.slop] * scale.EPhi
 EPhi <- EPhi / scale.EPhi
-Eb <- convert.bVec.to.b(bInit, names(reu13.df.obs))
+Eb <- convert.bVec.to.b(b.Init, names(reu13.df.obs))
 SCU.true <- calc_scu_values(Eb, y.list, EPhi)
 
 for(i.case in case.names){
@@ -33,21 +33,19 @@ for(i.case in case.names){
     next
   }
   load(fn.in)
-
-  ### Subset of mcmc output with scaling.
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  if(!file.exists(fn.in)){
-    cat("File not found: ", fn.in, "\n", sep = "")
-    next
-  }
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   cat("File not found: ", fn.in, "\n", sep = "")
+  #   next
+  # }
+  # load(fn.in)
 
   b <- convert.bVec.to.b(b.PM, names(reu13.df.obs))
   SCU <- calc_scu_values(b, y.list, phi.PM)
 
   ### Plot SCU.
   fn.out <- paste(prefix$plot.single,
-                  "scu_true_", i.case, ".pdf", sep = "")
+                  "scu_true_", i.case, "_nps.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     plotprxy(SCU.true$SCU, SCU$SCU,
              xlab = "True SCU (log10)",
@@ -59,7 +57,7 @@ for(i.case in case.names){
 
   ### Plot mSCU.
   fn.out <- paste(prefix$plot.single,
-                  "mscu_true_", i.case, ".pdf", sep = "")
+                  "mscu_true_", i.case, "_nps.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     plotprxy(SCU.true$mSCU, SCU$mSCU,
              log10.x = FALSE, log10.y = FALSE,

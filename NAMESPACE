@@ -1,4 +1,4 @@
-import(methods)
+import(methods, coda, foreach, parallel, stats, graphics, utils)
 useDynLib(cubfits)
 # exportPattern("^[[:alpha:]]+")
 
@@ -18,6 +18,10 @@ export(
   "plotaddmodel",
   "prop.bin.roc",
   "prop.model.roc",
+# NSE Plotting
+  "plotCUB.NSE",
+  "prop.model.nse",
+  "plotbin.NSE",
 # SCUO
   "calc_scuo_values",
   "scuo.random",
@@ -60,7 +64,19 @@ export(
   "cp.workflow",
 # MLE for mixnorm.
   "mixnormerr.optim",
-  "dmixnormerr"
+  "dmixnormerr",
+# Cedric
+  "plotCUB",
+  "plotTraces",
+  "plotBMatrixPosterior",
+  "plotExpectedPhiTrace",
+  "plotPTraces",
+  # "appendCUBresults",
+  "readGenome",
+  "cubmultichain",
+  "cubsinglechain",
+  "normalizeDataSet"
+  #"isConverged"
 )
 
 # Converting

@@ -22,16 +22,26 @@ mkdir ${ALL_OUT}
 mkdir ${ALL_OUT}/data
 mkdir ${ALL_OUT}/subset
 mkdir ${ALL_OUT}/log
-mkdir ${ALL_OUT}/log_nps
-mkdir ${ALL_OUT}/table
+mkdir ${ALL_OUT}/log_ps
 
+### For tables.
+mkdir ${ALL_OUT}/table
+mkdir ${ALL_OUT}/table/table_ps
+
+### For plots.
 mkdir ${ALL_OUT}/plot
 mkdir ${ALL_OUT}/plot/diag
 mkdir ${ALL_OUT}/plot/match
 mkdir ${ALL_OUT}/plot/single
 mkdir ${ALL_OUT}/plot/trace
-cp -R ${ALL_OUT}/plot ${ALL_OUT}/plot_nps
+# cp -R ${ALL_OUT}/plot ${ALL_OUT}/plot/plot_ps
+mkdir ${ALL_OUT}/plot/plot_ps
+mkdir ${ALL_OUT}/plot/plot_ps/diag
+mkdir ${ALL_OUT}/plot/plot_ps/match
+mkdir ${ALL_OUT}/plot/plot_ps/single
+mkdir ${ALL_OUT}/plot/plot_ps/trace
 
+### For outputs.
 mkdir ${ALL_OUT}/output
 mkdir ${ALL_OUT}/output/tmp
 

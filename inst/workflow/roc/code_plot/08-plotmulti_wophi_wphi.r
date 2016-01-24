@@ -9,6 +9,7 @@ source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 source(paste(prefix$code, "u1-get_negsel.r", sep = ""))
 source(paste(prefix$code.plot, "u2-plot_b_corr.r", sep = ""))
 source(paste(prefix$code.plot, "u5-new_page.r", sep = ""))
+source(paste(prefix$code.plot, "u6-adjust_focal_codon.r", sep = ""))
 
 ### Load data.
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
@@ -25,9 +26,9 @@ for(i.aa in aa.names){
 
 ### Get possible match cases. wophi fits vs wphi fits on wphi EPhi.
 match.case <- rbind(
-  c("ad_wophi_scuo", "ad_wphi_scuo"),
-  c("ad_wphi_wophi_scuo", "ad_wphi_scuo"),
-  c("ad_wophi_scuo", "ad_wphi_pm")
+  c("wophi_scuo", "wphi_scuo"),
+  c("wphi_wophi_scuo", "wphi_scuo"),
+  c("wophi_scuo", "wphi_pm")
 )
 match.case <- matrix(paste(model, match.case, sep = "_"), ncol = 2)
 
@@ -62,12 +63,12 @@ for(i.match in 1:nrow(match.case)){
     load(fn.in)
 
     ### Subset of mcmc output with scaling.
-    fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-    if(!file.exists(fn.in)){
-      cat("File not found: ", fn.in, "\n", sep = "")
-      next
-    }
-    load(fn.in)
+    # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+    # if(!file.exists(fn.in)){
+    #   cat("File not found: ", fn.in, "\n", sep = "")
+    #   next
+    # }
+    # load(fn.in)
 
     ### Reassign.
     phi.pm[[i.case]] <- phi.PM
@@ -107,7 +108,7 @@ for(i.match in 1:nrow(match.case)){
 
 
   ### Set layout.
-  case.main <- paste(match.case[i.match, 1], " vs ",
+  case.main <- paste(match.case[i.match, 1], " ",
                      match.case[i.match, 2], sep = "")
   fn.out <- paste(prefix$plot.multi, match.case[i.match, 1], "_",
                   match.case[i.match, 2], ".pdf", sep = "")
@@ -123,8 +124,13 @@ for(i.match in 1:nrow(match.case)){
     y.ci <- b.negsel.ci[[1]]
     x.label <- b.negsel.label.list[[1]]
     plot.b.corr(x, y, x.label, x.ci = x.ci, y.ci = y.ci,
-                xlab = "With Phi", ylab = "Without Phi",
-                main = "Delta.t", add.lm = TRUE)
+                # xlab = "With Phi", ylab = "Without Phi", main = "Delta.t",
+                add.lm = TRUE, add.ci = TRUE)
+    mtext(expression(paste(italic(Delta[t]), " , with ", italic(X[obs]))),
+          side = 1, line = 2.5, cex = 0.8)
+    mtext(expression(paste(italic(Delta[t]), " , without ", italic(X[obs]))),
+          side = 2, line = 2.5, cex = 0.8)
+    x.label.focal <- x.label
 
     ### Plot log(mu).
     x <- b.logmu[[2]]
@@ -132,9 +138,17 @@ for(i.match in 1:nrow(match.case)){
     x.ci <- b.logmu.ci[[2]]
     y.ci <- b.logmu.ci[[1]]
     x.label <- b.logmu.label.list[[1]]
-    plot.b.corr(x, y, x.label, x.ci = x.ci, y.ci = y.ci,
-                xlab = "With Phi", ylab = "Without Phi",
-                main = "log(mu)", add.lm = TRUE)
+    ### Adjust focal codons if needed and dispatch after adjusting.
+    new.order <- adjust.focal.codon(y, x.label, x.label.focal, y.ci = y.ci)
+    y <- new.order$y
+    y.ci <- new.order$y.ci
+    plot.b.corr(x, y, x.label.focal, x.ci = x.ci, y.ci = y.ci,
+                # xlab = "With Phi", ylab = "Without Phi", main = "log(mu)",
+                add.lm = TRUE, add.ci = TRUE)
+    mtext(expression(paste(italic(M), " , with ", italic(X[obs]))),
+          side = 1, line = 2.5, cex = 0.8)
+    mtext(expression(paste(italic(M), " , without ", italic(X[obs]))),
+          side = 2, line = 2.5, cex = 0.8)
 
     ### Overlap two histograms.
     p.1 <- hist(log10(phi.pm[[2]] / mean(phi.pm[[2]])),

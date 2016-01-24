@@ -10,17 +10,15 @@ my.pInit <- function(p.Init, phi.Obs, model.Phi, p.nclass = 2,
 
       ret <- c(sigmaW.Init, nu.Phi.Init, sigma.Phi.Init)
 
-      ### Overwrite .CF.PARAM$hp.gamma.shape and .CF.PARAM$hp.gamma.scale
-      ### using an informative flat prior. This only affects when
-      ### .CF.CT$type.p = "lognormal_MH" which needs to specify hyperparameters.
-      if(.CF.PARAM$hp.overwrite){
-        .CF.PARAM$hp.gamma.shape <- sigma.Phi.Init^2 /
-                                    .CF.PARAM$hp.gamma.inflate
-        .CF.PARAM$hp.gamma.scale <- .CF.PARAM$hp.gamma.inflate
+      ### One more for bias.Phi.
+      if(.CF.CONF$estimate.bias.Phi){
+        nu.Phi.Init <- - sigma.Phi.Init^2 / 2 
+        bias.Phi.Init <- log(mean(phi.Obs)) - nu.Phi.Init
+        ret <- c(sigmaW.Init, nu.Phi.Init, sigma.Phi.Init, bias.Phi.Init)
       }
     } else if(model.Phi[1] == "logmixture"){
       if(p.nclass <= 1){
-        stop("p.nclass > 1")
+        stop("p.nclass > 1 required")
       }
       log.phi.Obs <- matrix(log(phi.Obs), ncol = 1)
       tmp <- EMCluster::rand.EM(log.phi.Obs, nclass = as.integer(p.nclass),

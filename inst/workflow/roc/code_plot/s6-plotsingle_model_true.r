@@ -19,7 +19,8 @@ EPhi.true <- EPhi
 ### Arrange data.
 EPhi.true.lim <- range(EPhi.true)
 aa.names <- names(reu13.df.obs)
-ret.EPhi.true <- prop.bin.roc(reu13.df.obs, EPhi.true)
+ret.EPhi.true <- prop.bin.roc(reu13.df.obs, EPhi.true,
+                              bin.class = run.info$bin.class)
 noerror.roc <- prop.model.roc(fitlist, EPhi.true.lim)
 
 tmp <- convert.b.to.bVec(fitlist)
@@ -53,7 +54,12 @@ for(i.case in case.names){
   load(fn.in)
 
   b.PM <- convert.bVec.to.b(b.PM, aa.names)
-  predict.roc <- prop.model.roc(b.PM, EPhi.true.lim)
+  EPhi.lim <- range(c(EPhi.true.lim, EPhi))
+  predict.roc <- prop.model.roc(b.PM, EPhi.lim)
+
+  ### Fix xlim at log10 scale.
+  lim.bin <- range(log10(ret.EPhi.true[[1]]$center))
+  xlim <- c(lim.bin[1] - diff(lim.bin) / 4, lim.bin[2] + diff(lim.bin) / 4)
 
   ### Plot bin and model for measurements.
   fn.out <- paste(prefix$plot.single, "bin_merge_true_",
@@ -66,23 +72,23 @@ for(i.case in case.names){
     ### Plot title.
     par(mar = c(0, 0, 0, 0))
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-    text(0.5, 0.5,
-         paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""))
-    text(0.5, 0.2, "bin: true Phi")
-    par(mar = c(0, 0, 0, 0))
+    text(0.5, 0.6,
+         paste(workflow.name, ", ", get.case.main(i.case, model),
+               ", bin: true Phi", sep = ""))
+    text(0.5, 0.4, date(), cex = 0.6)
 
     ### Plot results.
     for(i.aa in 1:length(aa.names)){
       tmp.obs <- ret.EPhi.true[[i.aa]]
       tmp.roc <- predict.roc[[i.aa]]
       plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
-              lty = 1, axes = FALSE)
+              lty = 1, axes = FALSE, xlim = xlim)
       box()
-      text(0, 1, aa.names[i.aa], cex = 1.5)
+      text(mean(xlim), 1, aa.names[i.aa], cex = 1.5)
       if(i.aa %in% c(1, 6, 11, 16)){
         axis(2)
       }
-      if(i.aa %in% 15:19){
+      if(i.aa %in% 16:19){
         axis(1)
       }
       if(i.aa %in% 1:5){
@@ -111,6 +117,24 @@ for(i.case in case.names){
       }
     }
 
+    ### For cases with less aa.
+    i.aa <- 19 - i.aa
+    if(i.aa > 0){
+      for(i.plot in 1:i.aa){
+        plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1),
+             xlab = "", ylab = "", main = "", axes = FALSE)
+      }
+    }
+
+    ### Add histogram.
+    p.1 <- hist(log10(EPhi.true), nclass = 40, plot = FALSE)
+    hist.ylim <- range(p.1$counts)
+    hist.ylim[2] <- hist.ylim[2] + 0.2 * diff(hist.ylim)
+    plot(p.1, xlim = xlim, ylim = hist.ylim, main = "", xlab = "", ylab = "",
+         axes = FALSE)
+    axis(1)
+    axis(4)
+
     ### Add label.
     model.label <- "MCMC Posterior"
     model.lty <- 1
@@ -122,20 +146,21 @@ for(i.case in case.names){
       model.label <- c(model.label, "True Model")
       model.lty <- c(model.lty, 3)
     }
-    plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
-         xlim = c(0, 1), ylim = c(0, 1))
-    legend(0.1, 0.8, model.label, lty = model.lty, box.lty = 0)
+    legend(xlim[1], hist.ylim[2],
+           model.label, lty = model.lty, box.lty = 0, cex = 0.8)
 
     ### Plot xlab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
     if(exists("Eb")){
-      text(0.5, 0.5, "True Production Rate (log10)")
+      text(0.5, 0.5,
+           expression(paste(log[10], "(True Production Rate)", sep = "")))
     } else{
-      text(0.5, 0.5, "Estimated Production Rate (log10)")
+      text(0.5, 0.5,
+           expression(paste(log[10], "(Estimated Production Rate)", sep = "")))
     }
 
     ### Plot ylab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-    text(0.5, 0.5, "Propotion", srt = 90)
+    text(0.5, 0.5, "Codon Frequency", srt = 90)
   dev.off()
 }

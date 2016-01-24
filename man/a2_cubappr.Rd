@@ -6,13 +6,14 @@
   but without any expressions.
 }
 \usage{
-  cubappr(reu13.df.obs, phi.Init, y, n,
-          nIter = 1000, burnin = 100,
-          bInit = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
+  cubappr(reu13.df.obs, phi.pred.Init, y, n,
+          nIter = 1000,
+          b.Init = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
               b.DrawScale = .CF.CONF$b.DrawScale,
+              b.RInit = NULL,
           p.Init = NULL, p.nclass = .CF.CONF$p.nclass,
               p.DrawScale = .CF.CONF$p.DrawScale,
-          phi.DrawScale.pred = .CF.CONF$phi.DrawScale.pred,
+          phi.pred.DrawScale = .CF.CONF$phi.pred.DrawScale,
           model = .CF.CT$model[1], model.Phi = .CF.CT$model.Phi[1],
           adaptive = .CF.CT$adaptive[1],
           verbose = .CF.DP$verbose,
@@ -20,21 +21,24 @@
 }
 \arguments{
   \item{reu13.df.obs}{a \code{\link{reu13.df}} object, ORFs information.}
-  \item{phi.Init}{a \code{\link{phi.Obs}} object, temporarily initial of expression
+  \item{phi.pred.Init}{a \code{\link{phi.Obs}} object, temporarily initial of expression
                without measurement errors.}
   \item{y}{a \code{\link{y}} object, codon counts.}
   \item{n}{a \code{\link{n}} object, total codon counts.}
   \item{nIter}{number of iterations after burn-in iterations.}
-  \item{burnin}{number of burn-in iterations.}
-  \item{bInit}{initial values for parameters \code{\link{b}}.}
-  \item{init.b.Scale}{for initial \code{\link{b}} if \code{bInit = NULL}.}
+  \item{b.Init}{initial values for parameters \code{\link{b}}.}
+  \item{init.b.Scale}{for initial \code{\link{b}} if \code{b.Init = NULL}.}
   \item{b.DrawScale}{scaling factor for adaptive MCMC with random walks
                      when drawing new \code{\link{b}}.}
+  \item{b.RInit}{initial values (in a list) for \code{R} matrices of
+                 parameters \code{\link{b}} yielding from QR decomposition
+                 of \code{vglm()} for the variance-covariance matrix of
+                 \code{\link{b}}.}
   \item{p.Init}{initial values for hyper-parameters.}
   \item{p.nclass}{number of components for \code{model.Phi = "logmixture"}.}
   \item{p.DrawScale}{scaling factor for adaptive MCMC with random walks
                      when drawing new \code{sigma.Phi}.}
-  \item{phi.DrawScale.pred}{scaling factor for adaptive MCMC with random walks
+  \item{phi.pred.DrawScale}{scaling factor for adaptive MCMC with random walks
                             when drawing new Phi of predicted set.}
   \item{model}{model to be fitted, currently "roc" only.}
   \item{model.Phi}{prior model for Phi, currently "lognormal".}
@@ -45,8 +49,8 @@
   \item{report}{number of iterations to report more information.}
 }
 \details{
-  Total number of MCMC iterations is \code{burnin + nIter + 1}, but the
-  outputs may be thinned to \code{(burnin + nIter) / iterThin + 1}
+  Total number of MCMC iterations is \code{nIter + 1}, but the
+  outputs may be thinned to \code{nIter / iterThin + 1}
   iterations.
 
   Temporary result dumping may be controlled by \code{\link{.CF.DP}}.
@@ -56,7 +60,7 @@
   \code{b.Mat} for mutation and selection coefficients of \code{\link{b}},
   \code{p.Mat} for hyper-parameters, and
   \code{phi.Mat} for expected expression values Phi.
-  All lists are of length \code{(burnin + nIter) / iterThin + 1} and
+  All lists are of length \code{nIter / iterThin + 1} and
   each element contains the output of each iteration.
 
   All lists also can be binded as trace matrices, such as via
@@ -65,7 +69,7 @@
   further via other MCMC packages such as \pkg{coda}.
 }
 \note{
-  Note that \code{phi.Init} need to be normalized to mean 1.
+  Note that \code{phi.pred.Init} need to be normalized to mean 1.
 
   \code{p.DrawScale} may cause scaling prior if adaptive MCMC is used, and
   it can result in non-exits of equilibrium distribution.

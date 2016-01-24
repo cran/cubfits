@@ -49,16 +49,15 @@ all.jobs <- function(i.job){
   rownames(p.mcmc) <- names(ret$p.Mat[[1]])
 
   ### This is a risky matching by names since R use $ for lazy matching,
-  ### though it is fine for "phi.Mat.pred" when "phi.Mat" is missing.
+  ### though it is fine for "phi.pred.Mat" when "phi.Mat" is missing.
   # phi.mcmc <- do.call("cbind", ret$phi.Mat[range$subset])
   # rownames(phi.mcmc) <- names(ret$phi.Mat[[1]])
+  ### Since my.appr() cases don't have phi.Mat but have phi.pred.Mat
   if(is.null(ret[["phi.Mat"]])){
-    phi.mcmc <- do.call("cbind", ret[["phi.Mat.pred"]][range$subset])
-    rownames(phi.mcmc) <- names(ret[["phi.Mat.pred"]][[1]])
-  } else{
-    phi.mcmc <- do.call("cbind", ret[["phi.Mat"]][range$subset])
-    rownames(phi.mcmc) <- names(ret[["phi.Mat"]][[1]])
+    ret$phi.Mat <- ret$phi.pred.Mat
   }
+  phi.mcmc <- do.call("cbind", ret[["phi.Mat"]][range$subset])
+  rownames(phi.mcmc) <- names(ret[["phi.Mat"]][[1]])
 
   ### Dump posterior distributions.
   fn.out <- paste(prefix$subset, i.case, ".rda", sep = "")
@@ -73,8 +72,14 @@ all.jobs <- function(i.job){
 ### Original scale. ###
   ### Obtain posterior means.
   b.PM <- rowMeans(b.mcmc)
+  b.STD <- apply(b.mcmc, 1, sd)
   b.ci.PM <- t(apply(b.mcmc, 1, quantile, prob = ci.prob))
+  b.MED <- apply(b.mcmc, 1, median)
+
   p.PM <- rowMeans(p.mcmc)
+  p.STD <- apply(p.mcmc, 1, sd)
+  p.CI <- t(apply(p.mcmc, 1, quantile, prob = ci.prob))
+  p.MED <- apply(p.mcmc, 1, median)
 
   phi.PM <- rowMeans(phi.mcmc)
   phi.STD <- apply(phi.mcmc, 1, sd)
@@ -98,14 +103,23 @@ all.jobs <- function(i.job){
   b.logmu.ci.PM <- ret$b.logmu.ci.PM
   b.logmu.label <- ret$b.logmu.label
 
+  ### Negative selection by median.
+  ret <- get.negsel(b.MED, id.intercept, id.slop, aa.names, b.label,
+                    b.ci.PM = b.ci.PM)
+  ### Delta.t
+  b.negsel.MED <- ret$b.negsel.PM
+  ### log.mu
+  b.logmu.MED <- ret$b.logmu.PM
+
   ### Dump summarized results.
   fn.out <- paste(prefix$subset, i.case, "_PM.rda", sep = "")
   cat(i.job, ": ", i.case, ", dump: ", fn.out, "\n", sep = "")
-  save(b.PM, b.ci.PM, p.PM,
+  save(b.PM, b.STD, b.ci.PM, b.MED, b.label,
+       p.PM, p.STD, p.CI, p.MED,
        phi.PM, phi.STD, phi.CI, phi.MED,
-       phi.PM.log10, phi.STD.log10, phi.CI.log10, b.label,
-       b.negsel.PM, b.negsel.ci.PM, b.negsel.label,
-       b.logmu.PM, b.logmu.ci.PM, b.logmu.label,
+       phi.PM.log10, phi.STD.log10, phi.CI.log10,
+       b.negsel.PM, b.negsel.ci.PM, b.negsel.MED, b.negsel.label,
+       b.logmu.PM, b.logmu.ci.PM, b.logmu.MED, b.logmu.label,
        file = fn.out)
 
   ### Thinning.
@@ -135,7 +149,9 @@ all.jobs <- function(i.job){
   phi.mcmc <- t(t(phi.mcmc) / scale.EPhi)
   b.mcmc[id.slop,] <- t(t(b.mcmc[id.slop,]) * scale.EPhi)
   b.PM <- rowMeans(b.mcmc)
+  b.STD <- apply(b.mcmc, 1, sd)
   b.ci.PM <- t(apply(b.mcmc, 1, quantile, prob = ci.prob))
+  b.MED <- apply(b.mcmc, 1, median)
 
   phi.PM <- rowMeans(phi.mcmc)
   phi.STD <- apply(phi.mcmc, 1, sd)
@@ -159,14 +175,22 @@ all.jobs <- function(i.job){
   b.logmu.ci.PM <- ret$b.logmu.ci.PM
   b.logmu.label <- ret$b.logmu.label
 
+  ### Negative selection by median.
+  ret <- get.negsel(b.MED, id.intercept, id.slop, aa.names, b.label,
+                    b.ci.PM = b.ci.PM)
+  ### Delta.t
+  b.negsel.MED <- ret$b.negsel.PM
+  ### log.mu
+  b.logmu.MED <- ret$b.logmu.PM
+
   ### Dump summarized results.
   fn.out <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
   cat(i.job, ": ", i.case, ", dump: ", fn.out, "\n", sep = "")
-  save(b.PM, b.ci.PM,
+  save(b.PM, b.STD, b.ci.PM, b.MED, b.label,
        phi.PM, phi.STD, phi.CI, phi.MED,
-       phi.PM.log10, phi.STD.log10, phi.CI.log10, b.label,
-       b.negsel.PM, b.negsel.ci.PM, b.negsel.label,
-       b.logmu.PM, b.logmu.ci.PM, b.logmu.label,
+       phi.PM.log10, phi.STD.log10, phi.CI.log10,
+       b.negsel.PM, b.negsel.ci.PM, b.negsel.MED, b.negsel.label,
+       b.logmu.PM, b.logmu.ci.PM, b.logmu.MED, b.logmu.label,
        file = fn.out)
 
   return(c(comm.rank(), i.job))

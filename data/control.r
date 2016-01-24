@@ -2,10 +2,10 @@
 
 ### For method controls.
 .CF.CT <- list(
-  model = c("roc", "nsef", "rocnsef"),          # main models
+  model = c("roc"),                             # main models
   type.p = c("lognormal_RW",
              "lognormal_fix",
-             "lognormal_MH",
+             "lognormal_bias",
              "logmixture"),                     # proposal for hyperparameters
   type.Phi = c("RW_Norm"),                      # proposal for Phi
   model.Phi = c("lognormal", "logmixture"),     # prior of Phi
@@ -13,19 +13,27 @@
   init.fit = c("RW_Norm", "current", "random"), # how is b proposed
   parallel = c("lapply", "mclapply",
                "task.pull", "pbdLapply"),       # parallel functions
-  adaptive = c("simple", "none")                # method for adaptive mcmc
+  adaptive = c("simple", "none"),                # method for adaptive mcmc
+  prior.dist.M = c("uniform", "normal"),
+  prior.dist.Sphi = c("uniform", "normal")
 )
 
 ### For configuration of initial and draw scaling.
 .CF.CONF <- list(
-  scale.phi = TRUE,                # if phi were scaled to mean 1
+  scale.phi.Obs = FALSE,           # if phi.Obs were scaled to mean 1
   init.b.Scale = 1,                # initial b scale
   init.phi.Scale = 1,              # initial phi scale
   p.nclass = 2,                    # # of classes if mixture phi
   b.DrawScale = 1,                 # drawing scale for b if random walk
   p.DrawScale = 0.1,               # drawing scale for p if random walk
   phi.DrawScale = 1,               # random walk scale for phi
-  phi.DrawScale.pred = 1           # random walk scale for phi.pred
+  phi.pred.DrawScale = 1,          # random walk scale for phi.pred
+  sigma.Phi.DrawScale = 1,         # random walk scale for sigma.Phi
+  bias.Phi.DrawScale = 0.1,        # random walk scale for bias.Phi
+  estimate.bias.Phi = FALSE,        # if estimate bias of phi during MCMC
+  estimate.Phi.noise = TRUE,       # estimate the noise in the phi observed data (sigma epsilon)
+  estimate.S.Phi = TRUE,           # if FALSE, sPhi is fixed accross the run
+  compute.logL = TRUE              # if compute logL in each iteration
 )
 
 ### For optimization.
@@ -44,7 +52,6 @@
   dump = FALSE,                    # if dumping within MCMC
   iter = 1000,                     # iterations per dumping
   prefix.dump = "dump_",           # path and file names of dumping
-  trace.acceptance = TRUE,         # if trace acceptance rate
   verbose = FALSE,                 # if verbose
   iterThin = 1,                    # iterations to thin chain
   report = 10,                     # iterations to report
@@ -54,12 +61,12 @@
 ### For addaptive control.
 .CF.AC <- list(
   renew.iter = 100,                # per renewing iterations
-  target.accept.lower = 0.25,      # target acceptance lower bound
-  target.accept.upper = 0.5,       # target acceptance upper bound
-  scale.increase = 1.1,            # 10% more
-  scale.decrease = 0.9,            # 10% less
-  sigma2.lower = 0.01,             # lower bound of sigma^2
-  sigma2.upper = 100               # upper bound of sigma^2
+  target.accept.lower = 0.2,       # target acceptant rate lower bound
+  target.accept.upper = 0.3,       # target acceptant rate upper bound
+  scale.increase = 1.2,            # increase scale size
+  scale.decrease = 0.8,            # decrease scale size
+  sigma.lower = 1e-2,              # lower bound of relative scale size
+  sigma.upper = 1e2                # upper bound of relative scale size
 )
 
 ### For parameters as reestimated for Yeast according to Yassour's data.
@@ -67,15 +74,9 @@
   # phi.meanlog = -0.441473,         # yassour mean for log(phi)
   # phi.sdlog = 1.393285,            # yassour sd for log(phi)
   phi.meanlog = -1.125,            # mean of log(phi), -s^2/2
-  phi.sdlog = 1.5,                 # sd of log(phi)
-  # hp.gamma.mean = 0.966,           # yassour mean for sdlog
-  # hp.gamma.sd = 0.01375,           # yassour sd for sdlog
-  # hp.gamma.var = 0.0001890625,     # yassour var for sdlog
-  hp.gamma.shape = 4935.701,       # 0.966^2 / 0.0001890625
-  hp.gamma.scale = 0.0001957169,   # 0.0001890625 / 0.966
-  hp.gamma.inflate = 1.2,          # inflate gamma variance if overwrite
-  hp.overwrite = TRUE              # if allow my.pInit() to overwrite
+  phi.sdlog = 1.5,                  # sd of log(phi)
+  prior.M.a = 0,                    # first parameter of density function of prior (e.g. dnorm(x, mean=a, sd=b))
+  prior.M.b = 0.35,                     # second parameter of density function of prior (e.g dnorm(x, mean=a, sd=b))
+  prior.Sphi.a = 0.52,          # meanlog for lognormal Sphi prior
+  prior.Sphi.b = 0.33          # sdlog for lognormal Sphi prior
 )
-### Gamma has mean = alpha * beta and var = alpha * beta^2
-### where alpha and beta are the shape and scale parameters in R,
-### resepectively.

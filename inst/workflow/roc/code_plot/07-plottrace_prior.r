@@ -20,10 +20,9 @@ for(i.case in case.names){
   xlim <- range(x)
 
   trace <- do.call("cbind", ret$p.Mat)
-  # p.names <- rownames(trace)
-  # p.names[p.names == "nu.Phi"] <- "m.Phi"
-  # p.names[p.names == "bsig.Phi"] <- "s.Phi"
-  if(nrow(trace) == 3){
+  if(nrow(trace) == 4){
+    p.names <- c("sigmaW", "m.Phi", "s.Phi", "bias.Phi")
+  } else if(nrow(trace) == 3){
     p.names <- c("sigmaW", "m.Phi", "s.Phi")
   } else if(nrow(trace) == 2){
     p.names <- c("m.Phi", "s.Phi")
@@ -42,6 +41,7 @@ for(i.case in case.names){
            xlab = "Iterations", ylab = p.names[i.p])
       mtext(paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""),
             line = 3, cex = 0.6)
+      mtext(date(), line = 2.5, cex = 0.4)
       lines(x = x, y = trace[i.p,])
     dev.off()
   }

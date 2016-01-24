@@ -1,7 +1,7 @@
 ### For work flows only.
 
 get.workflow <- function(dir.name = "workflow/",
-    model = c("roc", "nsef"), pkg = "cubfits"){
+    model = c("roc"), pkg = "cubfits"){
   dir.name <- paste(dir.name, model[1], "/", sep = "")
   file.path <- tools::file_path_as_absolute(
                  system.file(dir.name, package = "cubfits"))
@@ -9,10 +9,10 @@ get.workflow <- function(dir.name = "workflow/",
 } # End of get.workflow().
 
 cp.workflow <- function(flow = c("wphi", "wophi", "simu", "wphi_wophi"),
-    model = c("roc", "nsef"), pkg = "cubfits", to = NULL, code = FALSE){
+    model = c("roc"), pkg = "cubfits", to = NULL, code = FALSE){
   ### Check OS.
   if(Sys.info()["sysname"] == "Windows"){
-    stop("Non of work flows supports windows system.")
+    stop("Non of the workflows supports windows system.")
   }
 
   ### Check flow.
@@ -58,10 +58,10 @@ cp.workflow <- function(flow = c("wphi", "wophi", "simu", "wphi_wophi"),
   path.file.new <- paste(path.current, "/run_2.sh", sep = "")
   file.copy(path.file, path.file.new, overwrite = TRUE)
 
-  cat("Copy and rename ", flow[1], "_run_2_nps.sh ...\n", sep = "")
-  path.file <- paste(path.workflow, "/script/", flow[1], "_run_2_nps.sh",
+  cat("Copy and rename ", flow[1], "_run_2_ps.sh ...\n", sep = "")
+  path.file <- paste(path.workflow, "/script/", flow[1], "_run_2_ps.sh",
                      sep = "")
-  path.file.new <- paste(path.current, "/run_2_nps.sh", sep = "")
+  path.file.new <- paste(path.current, "/run_2_ps.sh", sep = "")
   file.copy(path.file, path.file.new, overwrite = TRUE)
 
   cat("Copy and rename 00-set_env_", flow[1], ".r ...\n", sep = "")

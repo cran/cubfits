@@ -9,6 +9,7 @@ source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 source(paste(prefix$code, "u1-get_negsel.r", sep = ""))
 source(paste(prefix$code.plot, "u2-plot_b_corr.r", sep = ""))
 source(paste(prefix$code.plot, "u5-new_page.r", sep = ""))
+source(paste(prefix$code.plot, "u6-adjust_focal_codon.r", sep = ""))
 
 ### Load true Phi.
 fn.in <- paste(prefix$data, "simu_true_", model, ".rda", sep = "")
@@ -17,14 +18,14 @@ if(file.exists(fn.in)){
 } else{
   stop(paste(fn.in, " is not found.", sep = ""))
 }
-bInit <- convert.b.to.bVec(Eb)
+b.Init <- convert.b.to.bVec(Eb)
 
 
 ### Load results from collapsed runs for yassour with phi since
 ### wphi_wophi does not need to simulate new sequences.
 # fn.in <- paste(prefix$param, "small_bInit.rda", sep = "")
 # load(fn.in)
-# bInit <- convert.b.to.bVec(bInitList.roc)
+# b.Init <- convert.b.to.bVec(b.InitList.roc)
 # fn.in <- paste(prefix$param, "small_train.rda", sep = "")
 # load(fn.in)
 # EPhi <- phi.Obs
@@ -52,12 +53,12 @@ id.intercept <- grep("log.mu", all.names)
 id.slop <- grep("Delta.t", all.names)
 
 scale.EPhi <- mean(EPhi)
-bInit[id.slop] <- bInit[id.slop] * scale.EPhi
-bInit.negsel <- get.negsel(bInit, id.intercept, id.slop, aa.names, label)
+b.Init[id.slop] <- b.Init[id.slop] * scale.EPhi
+b.Init.negsel <- get.negsel(b.Init, id.intercept, id.slop, aa.names, label)
 
 ### True SCU.
 EPhi <- EPhi / scale.EPhi
-Eb <- convert.bVec.to.b(bInit, aa.names)
+Eb <- convert.bVec.to.b(b.Init, aa.names)
 SCU.true <- calc_scu_values(Eb, y.list, EPhi)
 
 
@@ -81,7 +82,7 @@ for(i.case in case.names){
   }
 
 
-  ### mcmc output.
+  ### Subset of mcmc output.
   fn.in <- paste(prefix$subset, i.case, ".rda", sep = "")
   load(fn.in)
 
@@ -90,38 +91,66 @@ for(i.case in case.names){
   load(fn.in)
 
   ### Subset of mcmc output with scaling.
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # load(fn.in)
 
   ### All mcmc outputs.
   fn.in <- paste(prefix$output, i.case, "/output_mcmc.rda", sep = "")
   load(fn.in)
 
+  ### Since my.appr() doesn't have phi.Mat, but have phi.pred.Mat
+  if(is.null(ret[["phi.Mat"]])){
+    ret$phi.Mat <- ret$phi.pred.Mat
+  }
+
 
   ### Set layout.
-  fn.out <- paste(prefix$plot.multi, "true_", i.case, ".pdf", sep = "")
+  fn.out <- paste(prefix$plot.multi, "true_", i.case, "_nps.pdf", sep = "")
   pdf(fn.out, width = 6, height = 10)
 
 ### New page.
     new.page(workflow.name, i.case, model)
 
     ### Plot Delta.t.
-    x <- bInit.negsel$b.negsel.PM
+    x <- b.Init.negsel$b.negsel.PM
     y <- b.negsel.PM
     y.ci <- b.negsel.ci.PM
-    x.label <- bInit.negsel$b.negsel.label
+    x.label <- b.Init.negsel$b.negsel.label
     plot.b.corr(x, y, x.label, y.ci = y.ci,
-                xlab = "True", ylab = "Estimated",
-                main = "Delta.t", add.lm = TRUE)
+                # xlab = "True", ylab = "Estimated", main = "Delta.t",
+                add.lm = TRUE, add.ci = TRUE)
+    mtext(expression(paste(italic(Delta[t]), " , true")),
+          side = 1, line = 2.5, cex = 0.8)
+    if(length(grep("wophi", i.case)) > 0){
+      mtext(expression(paste(italic(Delta[t]), " , without ", italic(X[obs]))),
+            side = 2, line = 2.5, cex = 0.8)
+    } else{
+      mtext(expression(paste(italic(Delta[t]), " , with ", italic(X[obs]))),
+            side = 2, line = 2.5, cex = 0.8)
+    }
+    x.label.focal <- x.label
 
     ### Plot log(mu).
-    x <- bInit.negsel$b.logmu.PM
+    x <- b.Init.negsel$b.logmu.PM
     y <- b.logmu.PM
     y.ci <- b.logmu.ci.PM
     x.label <- b.logmu.label
-    plot.b.corr(x, y, x.label, y.ci = y.ci,
-                xlab = "True", ylab = "Estimated",
-                main = "log(mu)", add.lm = TRUE)
+    ### Adjust focal codons if needed and dispatch after adjusting.
+    new.order <- adjust.focal.codon(y, x.label, x.label.focal, y.ci = y.ci)
+    y <- new.order$y
+    y.ci <- new.order$y.ci
+    plot.b.corr(x, y, x.label.focal, y.ci = y.ci,
+                # xlab = "True", ylab = "Estimated", main = "log(mu)",
+                add.lm = TRUE, add.ci = TRUE)
+    mtext(expression(paste(italic(M), " , true")),
+          side = 1, line = 2.5, cex = 0.8)
+    if(length(grep("wophi", i.case)) > 0){
+      mtext(expression(paste(italic(M), " , without ", italic(X[obs]))),
+            side = 2, line = 2.5, cex = 0.8)
+    } else{
+      mtext(expression(paste(italic(M), " , with ", italic(X[obs]))),
+            side = 2, line = 2.5, cex = 0.8)
+    }
 
     ### Overlap two histograms.
     p.1 <- hist(log10(EPhi / mean(EPhi)), nclass = 50, plot = FALSE)
@@ -147,7 +176,7 @@ for(i.case in case.names){
     legend(xlim[1], ylim[2], c("True", "Predicted"),
            pch = c(15, 15), col = c("#0000FF50", "#FF000050"), cex = 0.8)
 
-    ### Plot SCU
+    ### Plot SCU.
     b <- convert.bVec.to.b(b.PM, aa.names)
     SCU <- calc_scu_values(b, y.list, phi.PM)
 
@@ -156,7 +185,7 @@ for(i.case in case.names){
              ylab = "Predicted SCU (log10)",
              main = "SCU (Posterior Mean)")
 
-    ### Plot mSCU
+    ### Plot mSCU.
     plotprxy(SCU.true$mSCU, SCU$mSCU,
              log10.x = FALSE, log10.y = FALSE,
              xlab = "True mSCU",

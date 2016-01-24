@@ -32,7 +32,7 @@ if(file.exists(fn.in)){
   SCUO <- calc_scuo_values(y.scuo)$SCUO
 
   ### A fake SCUO is used.
-  phi <- data.frame(ORF = names(seq.string), phi = SCUO)
+  phi <- data.frame(ORF = names(seq.string), phi = as.double(SCUO))
 }
 
 ### Check and reorder.
@@ -40,8 +40,17 @@ seq.data <- seq.data[names(seq.data) %in% phi$ORF]
 phi <- phi[phi$ORF %in% names(seq.data),]
 seq.data <- seq.data[order(names(seq.data))]
 phi <- phi[order(phi$ORF),]
-phi.scale <- mean(phi[, 2])
-phi[, 2] <- phi[, 2] / phi.scale
+
+### .CF.CONF$estimate.bias.Phi may be TRUE or not, but it should not conflict
+### with .CF.CONF$scale.phi.Obs. No matter .CF.CONF$scale.phi.Obs is TRUE of FALSE.
+### Here, phi is for the observed measurements.
+if(.CF.CONF$scale.phi.Obs){
+  phi.scale <- mean(phi[, 2])
+  phi[, 2] <- phi[, 2] / phi.scale
+} else{
+  ### .CF.CONF$estimate.bias.Phi may be TRUE
+  phi.scale <- 1
+}
 
 ### Convert to string and get SCUO after subsetting and reordering.
 seq.string <- convert.seq.data.to.string(seq.data)
