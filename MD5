@@ -1,6 +1,6 @@
 e879eaad64aab8e1f8e63e298f5cea28 *COPYING
 837a2aaa27cb541f5f7ac3f6d57b0dbc *ChangeLog
-7471b2001124906df553f5c8bdb2a095 *DESCRIPTION
+bf462927fb9fe47003ac2be343866248 *DESCRIPTION
 9413837e8338c8ef43f9484d5286d308 *INSTALL
 6cbb44d757ff85669893300ddae5cead *NAMESPACE
 b031672046b9484c163bb51434db74ad *R/000_globalVariables.r
@@ -126,8 +126,8 @@ d28e0e2552dfa059e050a8e00a3b8ece *demo/roc.train.r
 fa6e95bd1142ed967ded31f2d846e650 *demo/yassour.mixed.r
 87d0fa052902927a93c4ee105656ce4f *demo/yassour.mixture.r
 abd1026ba9ea6136c01e87afebd646f0 *inst/CITATION
-0fb9cc3f82398c1c1a6941b383b982d3 *inst/doc/cubfits-guide.Rnw
-14fa4560c135cbf3c72672c9f3a5c35c *inst/doc/cubfits-guide.pdf
+84905fe1a56462976a4d2c293ce46d0d *inst/doc/cubfits-guide.Rnw
+57d32c976303f72572a184324b370978 *inst/doc/cubfits-guide.pdf
 df618bbc8c06c240f30b5c17aa6163c1 *inst/ex_data/phi_200.tsv
 abc26498b0d71b2480315c5dccdda8a3 *inst/ex_data/seq_200.fasta
 d66008369b03708447e836d39683d6d5 *inst/workflow/00_readme.txt
@@ -274,8 +274,10 @@ ad1e632b6c73abfd8560685153475933 *man/yy_yassour_PM.Rd
 65a4f67ec623ac95cfe08723a2aa35a0 *src/lib.c
 150c6b3eb03b5f9fb8233023435b5300 *src/lp_c_raw.c
 3f5bab272441a1b02dd1fc1c6e5dabb0 *src/stable_exp.c
+7c4bf6ed54d9730ea2ec8a34b7fd9c68 *src/zzz.c
+08330fd3af6439b70a09b93d2c21d160 *src/zzz.h
 a79b4a05353dcf54544e216fa706b965 *vignettes/build_pdf.sh
-0fb9cc3f82398c1c1a6941b383b982d3 *vignettes/cubfits-guide.Rnw
+84905fe1a56462976a4d2c293ce46d0d *vignettes/cubfits-guide.Rnw
 4a67594359eabdad137273bf89955cfc *vignettes/cubfits-include/00-preamble.tex
 40a4c414b25fabab658c3f8d72387db4 *vignettes/cubfits-include/01-acknowledgement.tex
 32b7259871fd2ab10e643adf083a1bb0 *vignettes/cubfits-include/01-copyright.tex
