@@ -1,6 +1,6 @@
 e879eaad64aab8e1f8e63e298f5cea28 *COPYING
-837a2aaa27cb541f5f7ac3f6d57b0dbc *ChangeLog
-bf462927fb9fe47003ac2be343866248 *DESCRIPTION
+daa5df0d059fcc0c0b8290d5d346b84b *ChangeLog
+e6c1a6eacef04cd3cfb628c75d813b06 *DESCRIPTION
 9413837e8338c8ef43f9484d5286d308 *INSTALL
 6cbb44d757ff85669893300ddae5cead *NAMESPACE
 b031672046b9484c163bb51434db74ad *R/000_globalVariables.r
@@ -84,7 +84,7 @@ f3195eaa711627927d3d8a7ff2aa1ccc *R/my.proposebiasPhi.r
 270f549d3712d2f8d0de03100759d6e3 *R/my.verbose.r
 5592aa7714e3feac86c42eff03ce6a27 *R/plotbin.r
 eee2ab279afa6cf6ea7889b87aff73fa *R/plotcolor.r
-75eb716f33e445175bc3cccb014d21e9 *R/plotmodel.r
+7464d453a9bf7618e48e9667af1ad329 *R/plotmodel.r
 13a29fbd82da43c2c4f03725188d3758 *R/plotprxy.r
 9201666df83e74185ab072a7ad81fb2e *R/prop.bin.roc.r
 a256c1446386e9a617315733dd2992be *R/prop.model.nse.r
@@ -97,9 +97,9 @@ bca7ecefd04084f7757bcb93aa9cb69c *R/simu.phi.Obs.r
 c817d7ce37c173f6b45510047333ed67 *R/yyy.r
 8bf0b8e0c7e0be00fd511d20d9686acd *R/zzz.r
 e8124e5f6036b5019cf3c89e1c16f649 *README
-dfb0c1e2ebd656b43ae887fc9b6ca64c *cleanup
-066ed6f7d55e75755056370f2a9225ab *configure
-4e103368a51336fa0d1f304a742d06ec *configure.ac
+8375292d84a05243984705a92c52df8d *cleanup
+43e333715b655b6c52ba06e9c461943e *configure
+9ccaa694405824ac0f8899d51549ea17 *configure.ac
 d41d8cd98f00b204e9800998ecf8427e *configure.win
 476f032d8efe72e7f18e805b36e86cbb *data/b.Init.rda
 a73a868d1824385337ba1c38c07cc21e *data/control.r
@@ -127,7 +127,7 @@ fa6e95bd1142ed967ded31f2d846e650 *demo/yassour.mixed.r
 87d0fa052902927a93c4ee105656ce4f *demo/yassour.mixture.r
 abd1026ba9ea6136c01e87afebd646f0 *inst/CITATION
 84905fe1a56462976a4d2c293ce46d0d *inst/doc/cubfits-guide.Rnw
-57d32c976303f72572a184324b370978 *inst/doc/cubfits-guide.pdf
+6c40e259455f6cb4988b0ec68d6e4a85 *inst/doc/cubfits-guide.pdf
 df618bbc8c06c240f30b5c17aa6163c1 *inst/ex_data/phi_200.tsv
 abc26498b0d71b2480315c5dccdda8a3 *inst/ex_data/seq_200.fasta
 d66008369b03708447e836d39683d6d5 *inst/workflow/00_readme.txt
@@ -254,7 +254,7 @@ dd6c7eeabe02da5a2afb57e8fe1c91af *man/s0_init.function.Rd
 34ace185c582a9fce7eabea1bd755a2f *man/s1_fitMultinom.Rd
 79d7325999788585ac0bdc167f6fc87b *man/s2_estimatePhi.Rd
 9ac08cea4fd91cc8bb8c3d598bf6f72a *man/t1_simulation.Rd
-7412e6b9330d98b3476e334c4c76c233 *man/t2_scuo.Rd
+05b1683e2e150b0c8b8cb433b06c4d57 *man/t2_scuo.Rd
 2952c571768fcb5e619c8982752719f2 *man/t3_scuo.random.Rd
 275bb83346d2955a72ce20f8bb5661cf *man/t4_cai.Rd
 d63420cb45fc17fefc95be638690d85b *man/t5_scu.Rd
@@ -268,9 +268,11 @@ cb9c03470701786b24309ac1896a5407 *man/u4_asl.Rd
 4f6a6a805f26dfd82e48c07532ce9afb *man/xx_dataformat.Rd
 830bf352bfdaaa059f0814116c5c817b *man/yy_control.Rd
 a2c5434147a9bfec147d74fd9cc26fb8 *man/yy_dataset.Rd
-5138356fa900f404d6a52195993760f6 *man/yy_yassour.Rd
+02b82e2d0da64fb057f0e7391a9fd299 *man/yy_yassour.Rd
 ad1e632b6c73abfd8560685153475933 *man/yy_yassour_PM.Rd
 3a884fc72f2bf8e384643bb3be22cd9c *man/zz_internal.Rd
+14aae942b7bde13904c94c7b41bb35c3 *src/Makevars.in
+14aae942b7bde13904c94c7b41bb35c3 *src/Makevars.win
 65a4f67ec623ac95cfe08723a2aa35a0 *src/lib.c
 150c6b3eb03b5f9fb8233023435b5300 *src/lp_c_raw.c
 3f5bab272441a1b02dd1fc1c6e5dabb0 *src/stable_exp.c
